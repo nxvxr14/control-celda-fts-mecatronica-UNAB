@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "plcIMG")(type "KiCad")(uri "C:/Users/huber/Documents/Proyecto de grado UNAB/PLC/plcIMG.pretty")(options "")(descr ""))
+)

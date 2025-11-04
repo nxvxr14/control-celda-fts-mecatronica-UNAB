@@ -1,0 +1,31 @@
+(footprint "cortePLC_UNAB" (version 20221018) (generator pcbnew)
+  (layer "F.Cu")
+  (fp_text reference "REF**" (at -2.54 -2.54 unlocked) (layer "F.SilkS")
+      (effects (font (size 1 1) (thickness 0.1)))
+    (tstamp 7bf8aab5-9128-4c0a-89c6-fe8846909d70)
+  )
+  (fp_text value "cortePLC_UNAB" (at 0 1 unlocked) (layer "F.Fab")
+      (effects (font (size 1 1) (thickness 0.15)))
+    (tstamp 7c78df06-a6f7-42cc-b81a-784eea535500)
+  )
+  (fp_text user "${REFERENCE}" (at 0 2.5 unlocked) (layer "F.Fab")
+      (effects (font (size 1 1) (thickness 0.15)))
+    (tstamp 29bb83fa-b08c-48a9-bcfb-21f377b3edab)
+  )
+  (fp_line (start 0 -86) (end 92 -86)
+    (stroke (width 0.2) (type solid)) (layer "Edge.Cuts") (tstamp 58051654-f985-4a14-b2a4-908e4697e9ae))
+  (fp_line (start 0 0) (end 0 -86)
+    (stroke (width 0.2) (type solid)) (layer "Edge.Cuts") (tstamp 840e2e3a-70be-4f44-898b-510d2d607018))
+  (fp_line (start 92 -86) (end 92 0)
+    (stroke (width 0.2) (type solid)) (layer "Edge.Cuts") (tstamp a9a8260d-a56c-47a7-85b2-9764df5dc51d))
+  (fp_line (start 92 0) (end 0 0)
+    (stroke (width 0.2) (type solid)) (layer "Edge.Cuts") (tstamp feaa403e-a30a-4692-84ff-8d5b0618779b))
+  (group "" (id a1fabd85-fc4e-4903-9e78-a7bef46b8436)
+    (members
+      58051654-f985-4a14-b2a4-908e4697e9ae
+      840e2e3a-70be-4f44-898b-510d2d607018
+      a9a8260d-a56c-47a7-85b2-9764df5dc51d
+      feaa403e-a30a-4692-84ff-8d5b0618779b
+    )
+  )
+)

@@ -1,0 +1,13 @@
+const board = boards[_id];
+//VARIABLES GLOBALES
+gVar[project].finalCarrera = 0
+// DECLARACION PINES ARDUINO
+const finalCarrera = 32;
+// DECLARACION TIPO DE PIN
+//Sensores
+board.pinMode(finalCarrera, board.MODES.INPUT);    //Entrada Digital
+// CODIGO LECTURA PINES
+//sensores
+board.digitalRead(finalCarrera, (value) => {
+  gVar[project].finalCarrera = value;
+});

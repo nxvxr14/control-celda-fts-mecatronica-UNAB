@@ -1,0 +1,31 @@
+(footprint "PLC_workspace" (version 20221018) (generator pcbnew)
+  (layer "F.Cu")
+  (fp_text reference "REF**" (at -2.54 2.54 unlocked) (layer "F.SilkS")
+      (effects (font (size 1 1) (thickness 0.1)))
+    (tstamp 66885958-de5b-468c-8027-2be7175b076e)
+  )
+  (fp_text value "PLC_workspace" (at 0 1 unlocked) (layer "F.Fab")
+      (effects (font (size 1 1) (thickness 0.15)))
+    (tstamp 67f76aef-8758-4b8e-a068-dc7855751191)
+  )
+  (fp_text user "${REFERENCE}" (at 0 2.5 unlocked) (layer "F.Fab")
+      (effects (font (size 1 1) (thickness 0.15)))
+    (tstamp 3fddbf35-a0cc-4c00-a7cd-0dcb9ef2521a)
+  )
+  (fp_line (start 0 -86) (end 92 -86)
+    (stroke (width 0.2) (type solid)) (layer "Edge.Cuts") (tstamp 5e14d85a-7605-496d-b5f5-b8646173b700))
+  (fp_line (start 0 0) (end 0 -86)
+    (stroke (width 0.2) (type solid)) (layer "Edge.Cuts") (tstamp f2618878-a954-4757-8c86-1e61f9b073da))
+  (fp_line (start 92 -86) (end 92 0)
+    (stroke (width 0.2) (type solid)) (layer "Edge.Cuts") (tstamp 9d1faa7b-e851-4299-859b-5ccd444034e0))
+  (fp_line (start 92 0) (end 0 0)
+    (stroke (width 0.2) (type solid)) (layer "Edge.Cuts") (tstamp 835284ce-85f5-47b7-b06b-1a85c1a8b9f3))
+  (group "" (id 32b52978-6627-44b2-889c-bd0df558116f)
+    (members
+      5e14d85a-7605-496d-b5f5-b8646173b700
+      835284ce-85f5-47b7-b06b-1a85c1a8b9f3
+      9d1faa7b-e851-4299-859b-5ccd444034e0
+      f2618878-a954-4757-8c86-1e61f9b073da
+    )
+  )
+)

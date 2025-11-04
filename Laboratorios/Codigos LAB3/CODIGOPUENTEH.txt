@@ -1,0 +1,50 @@
+const board = boards[_id];
+//VARIABLES GLOBALES
+gVar[project].bandaVelocidad = 120
+gVar[project].barreraPrueba = false
+//Variables LOCALES
+let iSbarrera = true
+
+// DECLARACION PINES ARDUINO
+const bandaL = 35;
+const bandaR = 37;
+const bandaPwm = 6;
+const clasificadorL = 31;
+const clasificadorR = 33;
+const clasificadorPwm = 5;
+
+// DECLARACION TIPO DE PIN
+//Sensores
+//motor1
+board.pinMode(bandaL, board.MODES.OUTPUT);   //Salida Digital
+board.pinMode(bandaR, board.MODES.OUTPUT);
+board.pinMode(bandaPwm, board.MODES.PWM);    //Salida Analoga PWM
+//motor2
+board.pinMode(clasificadorL, board.MODES.OUTPUT);
+board.pinMode(clasificadorR, board.MODES.OUTPUT);
+board.pinMode(clasificadorPwm, board.MODES.PWM);
+
+// CODIGO LECTURA PINES
+function moverMotor(bpwm) {
+  board.digitalWrite(bandaL, 0);
+  board.digitalWrite(bandaR, 1);
+  board.analogWrite(bandaPwm, bpwm);
+  // Código para mover el motor
+}
+function moverBarrera(barreraL, barreraR, barreraPwm) {
+
+   board.digitalWrite(clasificadorL, barreraL);
+   board.digitalWrite(clasificadorR, barreraR);
+   board.analogWrite(clasificadorPwm, barreraPwm);
+
+}
+//CODIGO PRINCIPAL
+setInterval(() => {
+  moverMotor(gVar[project].bandaVelocidad)
+  if (gVar[project].barreraPrueba===true ){
+   moverBarrera(1,0,77)
+  }else if (gVar[project].barreraPrueba===false ) {
+   moverBarrera(0,1,77)
+  }
+
+}, 100, { _id });

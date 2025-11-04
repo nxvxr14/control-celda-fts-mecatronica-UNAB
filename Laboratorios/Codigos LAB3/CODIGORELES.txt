@@ -1,0 +1,48 @@
+const board = boards[_id];
+
+
+//VARIABLES GLOBALES
+gVar[project].releSubirBrazo = false
+gVar[project].releBajarBrazo = false
+gVar[project].releAspirarBrazo = false
+
+
+// DECLARACION PINES ARDUINO
+//Reles
+const releAspirar = 39;
+const releSube = 41;
+const releBaja = 43;
+
+
+// DECLARACION TIPO DE PIN
+//Reles
+board.pinMode(releAspirar, board.MODES.OUTPUT);
+board.pinMode(releSube, board.MODES.OUTPUT);
+board.pinMode(releBaja, board.MODES.OUTPUT);
+
+
+// CODIGO LECTURA PINES
+function relesSB(rSube, rBaja) {
+  board.digitalWrite(releSube, rSube);
+  board.digitalWrite(releBaja, rBaja);
+}
+function relesA(rAspira) {
+  board.digitalWrite(releAspirar, rAspira);
+}
+
+
+//CODIGO PRINCIPAL
+setInterval(() => {
+  if (gVar[project].releSubirBrazo === true && gVar[project].releBajarBrazo === false ){
+  relesSB(1,0)
+  } else if (gVar[project].releBajarBrazo === true && gVar[project].releSubirBrazo=== false){
+    relesSB(0, 1)
+  }else{
+    relesSB(0,0)
+  }
+  if (gVar[project].releAspirarBrazo === true){
+    relesA(1)
+  }else {
+    relesA(0)
+  }
+}, 100, { _id });

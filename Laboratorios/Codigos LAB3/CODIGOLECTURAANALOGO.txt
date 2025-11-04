@@ -1,0 +1,16 @@
+const board = boards[_id];
+//VARIABLES GLOBALES
+gVar[project].sensorColor = 0
+// VARIABLES LOCALES
+let voltage = 0
+// DECLARACION PINES ARDUINO
+const sensorColor = 0;
+// DECLARACION TIPO DE PIN
+//Sensores
+board.pinMode(sensorColor, board.MODES.ANALOG);    //Entrada Analoga
+// CODIGO LECTURA PINES
+//sensores
+board.analogRead(sensorColor, (value) => {
+  voltage = (value.toFixed(2) / 1023) * 10; // Conversión a rango 0-5V
+  gVar[project].sensorColor = voltage;
+});

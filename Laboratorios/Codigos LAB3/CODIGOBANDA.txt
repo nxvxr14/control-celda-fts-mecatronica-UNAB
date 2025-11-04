@@ -1,0 +1,151 @@
+const board = boards[_id];
+
+
+//VARIABLES GLOBALES
+gVar[project].fototransistor = 0
+gVar[project].finalCarrera = 0
+gVar[project].sensorColor = 0
+gVar[project].bandaVelocidad = 120
+gVar[project].rtFototransistor = false
+gVar[project].rtBarrera = false
+gVar[project].rtBanda = false
+gVar[project].banderaBanda = 0
+gVar[project].contAzul = 0
+gVar[project].contVerde = 0
+
+// VARIABLES LOCALES
+let voltage = 0
+let isFototransistor = true
+let isBarrera = false
+let isAzul = false
+let isVerde = false
+let contadorAzul = 0;
+let contadorVerde = 0;
+
+
+// DECLARACION PINES ARDUINO
+const fototransistor = 30;
+const finalCarrera = 32;
+const sensorColor = 0;
+const bandaL = 35;
+const bandaR = 37;
+const bandaPwm = 6;
+const clasificadorL = 31;
+const clasificadorR = 33;
+const clasificadorPwm = 5;
+
+// DECLARACION TIPO DE PIN
+//sensores
+board.pinMode(fototransistor, board.MODES.INPUT);
+board.pinMode(finalCarrera, board.MODES.INPUT);    //Entrada Digital
+board.pinMode(sensorColor, board.MODES.ANALOG);    //Entrada Analoga
+//motor1
+board.pinMode(bandaL, board.MODES.OUTPUT);   //Salida Digital
+board.pinMode(bandaR, board.MODES.OUTPUT);
+board.pinMode(bandaPwm, board.MODES.PWM);    //Salida Analoga PWM
+//motor2
+board.pinMode(clasificadorL, board.MODES.OUTPUT);
+board.pinMode(clasificadorR, board.MODES.OUTPUT);
+board.pinMode(clasificadorPwm, board.MODES.PWM);
+
+// CODIGO LECTURA PINES
+//sensores
+board.digitalRead(finalCarrera, (value) => {
+   gVar[project].finalCarrera = value;
+});
+board.digitalRead(fototransistor, (value) => {
+   gVar[project].fototransistor = value;
+});
+
+board.analogRead(sensorColor, (value) => {
+   voltage = (value.toFixed(2) / 1023) * 10; // Conversión a rango 0-5V
+   gVar[project].sensorColor = voltage;
+   isAzul = (gVar[project].sensorColor >= 2.8 && gVar[project].sensorColor < 6.88) ? true : false;
+   isVerde = (gVar[project].sensorColor >= 6.89 && gVar[project].sensorColor <= 9) ? true : false;
+});
+//motores
+moverBarrera(0, 1, 0)
+
+
+
+// CODIGO
+function moverMotor(bpwm) {
+   board.digitalWrite(bandaL, 0);
+   board.digitalWrite(bandaR, 1);
+   board.analogWrite(bandaPwm, bpwm);
+   // Código para mover el motor
+}
+function moverBarrera(barreraL, barreraR, barreraPwm) {
+
+   board.digitalWrite(clasificadorL, barreraL);
+   board.digitalWrite(clasificadorR, barreraR);
+   board.analogWrite(clasificadorPwm, barreraPwm);
+
+}
+
+setInterval(() => {
+   moverMotor(gVar[project].bandaVelocidad)
+   if (gVar[project].banderaBrazoaBanda === true) {
+      gVar[project].bandaVelocidad = 0
+      gVar[project].banderaBrazoaBanda = false
+      setTimeout(() => {
+         gVar[project].bandaVelocidad = 120
+      }, 4000, { _id });
+      return
+
+
+   }
+   if (gVar[project].fototransistor === 0 && isFototransistor === true && gVar[project].banderaBrazoaBanda === false) {
+      isFototransistor = false
+      gVar[project].bandaVelocidad = 0
+      console.log("OBJETO")
+      console.log(gVar[project].sensorColor)
+
+      if (isAzul === true) {
+         isAzul =false
+         setTimeout(() => {
+            moverBarrera(1, 0, 89)
+            gVar[project].bandaVelocidad = 120
+            isBarrera = true
+            contadorAzul++
+            gVar[project].contAzul = contadorAzul
+         }, 1300, { _id });
+         return
+
+      }
+      if (isVerde === true) {
+         isVerde=false
+         setTimeout(() => {
+            isBarrera = true
+            gVar[project].bandaVelocidad = 120
+            moverBarrera(0, 1, 85)
+            contadorVerde++
+            gVar[project].contVerde = contadorVerde
+         }, 1300, { _id });
+         return
+
+      }
+
+
+   }
+
+   if (isBarrera === true) {
+      isBarrera = false
+      setTimeout(() => {
+         isFototransistor = true
+         moverBarrera(1, 0, 0)
+      }, 1500, { _id });
+      return
+
+
+   }
+
+
+}, 100, { _id });
+//Banderas
+setInterval(() => {
+   gVar[project].rtFototransistor = (gVar[project].fototransistor) ?  false:true ;
+   gVar[project].rtBanda = (gVar[project].bandaVelocidad) ? true : false ;
+   gVar[project].rtBarrera = (gVar[project].finalCarrera) ? false : true;
+   
+}, 50, { _id });

@@ -1,0 +1,222 @@
+const board = boards[_id];
+//Variables Globales
+gVar[project].sensorMotor = 0
+gVar[project].sensorTope = 0
+gVar[project].fototransistorBrazo = 0
+gVar[project].contadorPiezas = 0
+gVar[project].arraycontadorPiezas = []
+gVar[project].banderaBrazoaBanda = false
+//Banderas
+gVar[project].rtFototransistorBrazo = false
+gVar[project].rtPiezaNueva = false
+gVar[project].rtreleAspirar = false
+gVar[project].rtreleBajar = false
+gVar[project].rtreleSubir = false
+
+//declarar pines
+//Reles
+const releAspirar = 39;
+const releSube = 41;
+const releBaja = 43;
+//Sensores 24v
+const sensorMotor = 32;
+const sensorTope = 30;
+const fototransistor = 28;
+// motor
+const bandaL = 35;
+const bandaR = 37;
+const bandaPwm = 6;
+
+
+// modo pines
+board.pinMode(releAspirar, board.MODES.OUTPUT);
+board.pinMode(releSube, board.MODES.OUTPUT);
+board.pinMode(releBaja, board.MODES.OUTPUT);
+board.pinMode(sensorMotor, board.MODES.INPUT);
+board.pinMode(sensorTope, board.MODES.INPUT);
+board.pinMode(fototransistor, board.MODES.INPUT);
+//motor1
+board.pinMode(bandaL, board.MODES.OUTPUT);
+board.pinMode(bandaR, board.MODES.OUTPUT);
+board.pinMode(bandaPwm, board.MODES.PWM);
+
+
+
+
+
+//Variables
+let banderaPrueba = true; // BANDERA REINICIO
+let isCero = false;
+let isUno = false;
+let isDos = false;
+let isTres = false;
+let isCuatro = false;
+let isCinco = false;
+let isSeix = false;
+let isSiete = false;
+let estadoAnterior = 0; // Estado anterior del interruptor
+let contador = 0; // Contador de cambios de 0 a 1
+
+let contadoPiezas = 0;
+//Codigo Inicial
+//sensores
+board.digitalRead(sensorMotor, (value) => {
+   gVar[project].sensorMotor = value;
+});
+board.digitalRead(sensorTope, (value) => {
+   gVar[project].sensorTope = value;
+});
+board.digitalRead(fototransistor, (value) => {
+   gVar[project].fototransistorBrazo = value;
+});
+
+
+
+
+
+
+
+
+// CODIGO
+//INICIAR
+function moverMotorBrazo(brazoL, brazoR, brazoPwm) {
+   board.digitalWrite(bandaL, brazoL);
+   board.digitalWrite(bandaR, brazoR);
+   board.analogWrite(bandaPwm, brazoPwm);
+
+}
+function relesSB(rSube, rBaja) {
+   board.digitalWrite(releSube, rSube);
+   board.digitalWrite(releBaja, rBaja);
+   gVar[project].rtreleBajar = (rBaja) ? true : false;
+   gVar[project].rtreleSubir = (rSube) ? true : false;
+
+}
+function relesA(rAspira) {
+   gVar[project].rtreleAspirar = (rAspira) ? true : false;
+   board.digitalWrite(releAspirar, rAspira);
+}
+
+relesA(0)
+relesSB(0, 0)
+
+
+
+
+
+//MAIN
+setInterval(() => {
+
+   if (estadoAnterior === 1 && gVar[project].sensorMotor === 0) {
+      contador++;
+      console.log(`Cambio detectado de 0 a 1. Contador: ${contador}`);
+   }
+   // Actualizar el estado anterior
+   estadoAnterior = gVar[project].sensorMotor;
+
+   if (gVar[project].sensorTope === 0 && banderaPrueba === true) {
+      moverMotorBrazo(1, 0, 200)
+   } else if (gVar[project].sensorTope === 1 && banderaPrueba === true) {
+      banderaPrueba = false
+      relesSB(0, 0)
+      moverMotorBrazo(1, 0, 0)
+   }
+
+   if (gVar[project].fototransistorBrazo === 0 && isCero === false && gVar[project].sensorTope === 1) {
+      contador = 0
+      relesSB(1, 0)
+      isUno = true;
+      isCero = true;
+      console.log("pieza")
+      return
+   }
+   if (isUno === true) {
+      isUno = false
+      setTimeout(() => {
+         relesA(1)
+         isDos = true;
+         console.log("primer paso")
+      }, 1000, { _id });
+
+
+   }
+   if (isDos === true) {
+      isDos = false;
+      setTimeout(() => {
+         isTres = true
+         relesSB(0, 1)
+         console.log("segundo paso")
+
+      }, 1000, { _id });
+      return
+   }
+   if (isTres === true) {
+      isTres = false
+
+      setTimeout(() => {
+         relesSB(0, 0)
+         moverMotorBrazo(0, 1, 200)
+         isCuatro = true
+         console.log("tercer paso")
+
+      }, 1000, { _id });
+      return
+
+   }
+   if (isCuatro === true && contador === 3) {
+      isCuatro = false
+      moverMotorBrazo(0, 1, 0)
+      console.log("cuarto paso")
+      isCinco = true
+
+      return
+   }
+   if (isCinco === true) {
+      isCinco = false
+      relesSB(1, 0)
+      gVar[project].banderaBrazoaBanda = true
+      console.log("quinto paso")
+      setTimeout(() => {
+         relesSB(0, 0)
+         relesA(0)
+         isSeix = true
+      }, 100, { _id });
+      return
+
+   }
+   if (isSeix === true) {
+      isSeix = false
+      setTimeout(() => {
+         console.log("se dejo la pieza")
+         relesSB(0, 1)
+         contador = 0
+         isSiete = true
+      }, 1500, { _id });
+      return
+   }
+   if (isSiete === true) {
+      isSiete = false
+      setTimeout(() => {
+         console.log("volver")
+         banderaPrueba = true
+         isCero = false
+         contadoPiezas++
+         gVar[project].contadorPiezas = contadoPiezas
+         gVar[project].arraycontadorPiezas.push(contadoPiezas)
+
+      }, 1000, { _id });
+      return
+   }
+
+
+
+}, 40, { _id });
+//BANDERAS PROGRAMACION 
+setInterval(() => {
+   gVar[project].rtFototransistorBrazo = (gVar[project].fototransistorBrazo) ? false : true;
+   gVar[project].rtPiezaNueva = gVar[project].banderaBrazoaBanda
+}, 40, { _id });
+//CONTADOR PIEZAS GRAFICA HMI
+setInterval(() => {
+   gVar[project].arraycontadorPiezas.push(contadoPiezas)
+}, 400, { _id });
